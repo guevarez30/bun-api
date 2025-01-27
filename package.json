@@ -2,6 +2,10 @@
   "name": "bun-api",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "start": "bun run index.js",
+    "dev": "bun run index.js --watch"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },
@@ -12,3 +16,4 @@
     "elysia": "^1.2.10"
   }
 }
+
