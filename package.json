@@ -1,19 +1,16 @@
 {
   "name": "bun-api",
-  "module": "index.ts",
-  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "start": "bun run index.js",
-    "dev": "bun run index.js --watch"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
-  "devDependencies": {
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "elysia": "^1.2.10"
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
   }
 }
-

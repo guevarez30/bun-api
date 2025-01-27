@@ -1,48 +1,75 @@
-import { Elysia } from "elysia";
+const express = require("express");
+const cors = require("cors");
 
-const app = new Elysia();
+const app = express();
 
-app.get("/", () => ({ message: "Welcome to Bun API with Elysia!" }));
+// Enable CORS for any client
+app.use(cors());
+app.use(express.json()); // To parse JSON request bodies
 
+// In-memory user storage
 const users = new Map();
 
-app.get("/users", () => Array.from(users.values()));
-
-app.get("/users/:id", ({ params }) => {
-  const user = users.get(Number(params.id));
-  return user ? user : { error: "User not found" };
+// Home route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to the Express API!" });
 });
 
-app.post("/users", ({ body }) => {
-  if (!body || !body.name) return { error: "Name is required" };
+// Get all users
+app.get("/users", (req, res) => {
+  res.json(Array.from(users.values()));
+});
 
+// Get user by ID
+app.get("/users/:id", (req, res) => {
+  const user = users.get(Number(req.params.id));
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ error: "User not found" });
+  }
+});
+
+// Create a new user
+app.post("/users", (req, res) => {
+  const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ error: "Name is required" });
+  }
   const id = users.size + 1;
-  const user = { id, name: body.name };
-  users.set(id, user);
-  return user;
+  const newUser = { id, name };
+  users.set(id, newUser);
+  res.status(201).json(newUser);
 });
 
-app.put("/users/:id", ({ params, body }) => {
-  const id = Number(params.id);
-  if (!users.has(id)) return { error: "User not found" };
-  if (!body || !body.name) return { error: "Name is required" };
-
-  const updatedUser = { id, name: body.name };
+// Update a user
+app.put("/users/:id", (req, res) => {
+  const id = Number(req.params.id);
+  if (!users.has(id)) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ error: "Name is required" });
+  }
+  const updatedUser = { id, name };
   users.set(id, updatedUser);
-  return updatedUser;
+  res.json(updatedUser);
 });
 
-app.delete("/users/:id", ({ params }) => {
-  const id = Number(params.id);
-  if (!users.has(id)) return { error: "User not found" };
-
+// Delete a user
+app.delete("/users/:id", (req, res) => {
+  const id = Number(req.params.id);
+  if (!users.has(id)) {
+    return res.status(404).json({ error: "User not found" });
+  }
   users.delete(id);
-  return { message: "User deleted successfully" };
+  res.json({ message: "User deleted successfully" });
 });
 
-const PORT = process.env.PORT ?? 8080;
-// Start server
+// Start the server
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log("🚀 Server is running");
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
 
