@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-import http from "http";
+const http = require("http");
 
 const app = express();
 
@@ -71,5 +71,5 @@ app.delete("/users/:id", (req, res) => {
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3003;
 server.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
