@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+import http from "http";
 
 const app = express();
 
@@ -67,8 +68,8 @@ app.delete("/users/:id", (req, res) => {
   res.json({ message: "User deleted successfully" });
 });
 
-// Start the server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, '::', () => {
-    console.log(`Server listening on [::]${PORT}`);
+const server = http.createServer(app);
+const PORT = process.env.PORT || 3003;
+server.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
 });
